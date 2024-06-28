@@ -12,10 +12,10 @@ user_menu = st.sidebar.radio(
 df = pd.read_csv("NBA Player Stats(1950 - 2022).csv")
 # Cleaning the Data
 df = Preprocessor(df)
-per_mode = ["Totals","Per Game","Per 36 Mins","Per 48 Mins"]
+per_mode = ["Totals", "Per Game", "Per 36 Mins", "Per 48 Mins"]
 if user_menu == 'Trends':
     st.sidebar.header("Trends")
-    per_mode = st.sidebar.selectbox("Select Mode",per_mode)
+    per_mode = st.sidebar.selectbox("Select Mode", per_mode)
 
-    if per_mode == "Totals" :
+    if per_mode == "Totals":
         st.title("Totals Stats")
