@@ -42,7 +42,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/jhala/PROJECTS/ALL_ABOUT_OLYMPICS/olympics-analysis-web-app"
+    "last_opened_file_path": "C:/Users/jhala/PROJECTS/ALL_ABOUT_NBA/NBA WEBAPP"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -173,7 +173,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722020276106</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="implemented Preprocessor function on the dataset">
+      <option name="closed" value="true" />
+      <created>1722101448041</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1722101448041</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

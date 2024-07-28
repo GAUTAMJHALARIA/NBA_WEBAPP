@@ -188,3 +188,49 @@ with (colm2):
     fig,ax = plt.subplots()
     ax = shot_chart(player_shotchart_df, title="LeBron shot Chart 2019-20")
     st.pyplot(fig)
+
+
+co1,co2 = st.columns(2)
+with co1 :
+    categories = ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'FT%', 'FG%', 'MIN', 'TOV']
+    season_stats = [25, 10, 7, 2, 1, 3, 85, 45, 35, 5]  # Example season stats
+    interval_stats = [30, 8, 6, 1, 0.5, 2, 80, 50, 40, 7]  # Example interval stats
+
+    # Number of variables
+    num_vars = len(categories)
+
+    # Compute angle of each axis
+    angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+    angles += angles[:1]  # Ensure the plot is circular
+
+    # The radar chart requires the data to be in circular form
+    season_stats += season_stats[:1]
+    interval_stats += interval_stats[:1]
+
+    # Plotting
+    fig1, ax1 = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+
+    # Draw one axe per variable
+    ax1.set_theta_offset(np.pi / 2)
+    ax1.set_theta_direction(-1)
+
+    # Draw axis per variable and add labels
+    plt.xticks(angles[:-1], categories)
+
+    # Draw y-labels
+    ax1.set_rscale('log')
+    plt.yticks([10, 20, 30, 40, 50], ["10", "20", "30", "40", "50"], color="grey", size=7)
+    plt.ylim(0, 50)
+
+    # Plot data
+    ax1.plot(angles, season_stats, linewidth=1, linestyle='solid', label="Season",marker=".")
+    ax1.fill(angles, season_stats, 'b', alpha=0)
+
+    ax1.plot(angles, interval_stats, linewidth=1, linestyle='solid', label="Interval",marker=".")
+    ax1.fill(angles, interval_stats, 'r', alpha=0)
+
+    # Add a legend
+    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+
+    # Show the plot
+    st.pyplot(fig1)
