@@ -5,6 +5,8 @@ from nba_api.stats.static import players
 from nba_api.stats.endpoints import shotchartdetail
 from nba_api.stats.endpoints import playercareerstats
 import numpy as np
+import pandas as pd
+import seaborn as sns
 from matplotlib import cm
 from matplotlib.patches import Circle, Rectangle, Arc, ConnectionPatch, Polygon, PathPatch
 from matplotlib.collections import PatchCollection
@@ -234,3 +236,41 @@ with co1 :
 
     # Show the plot
     st.pyplot(fig1)
+
+
+
+data = {
+    'Season': ['2003-04', '2004-05', '2005-06', '2006-07', '2007-08', '2008-09', '2009-10', '2010-11', '2011-12', '2012-13', '2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24'],
+    'MIN': [1000, 2000, 3000, 2500, 3200, 3100, 3000, 2800, 2900, 2700, 2600, 2500, 2400, 2300, 2200, 2100, 2000, 1900, 1800, 1700, 1600],
+    'Games_Played': [50, 60, 70, 80, 75, 78, 76, 72, 74, 71, 70, 68, 67, 65, 63, 62, 60, 58, 56, 54, 52]
+}
+
+df = pd.DataFrame(data)
+with co2:
+    sns.set(style="darkgrid")
+
+    # Create a figure and axis
+    fig2, ax2 = plt.subplots(figsize=(12, 6))
+
+    # Plot total minutes as a line plot
+    ax2.plot(df['Season'], df['MIN'], color='b', marker='o', label='MIN')
+    ax2.set_xlabel('Season')
+    ax2.set_ylabel('Total Minutes', color='b')
+    ax2.tick_params(axis='y', labelcolor='b')
+
+    # Create another axis for the bar plot
+    ax3 = ax2.twinx()
+    ax3.bar(df['Season'], df['Games_Played'], alpha=0.6, color='brown', label='Game Played')
+    ax3.set_ylabel('Games Played', color='brown')
+    ax3.tick_params(axis='y', labelcolor='brown')
+
+    # Add legends
+    ax2.legend(loc='upper left')
+    ax3.legend(loc='upper right')
+
+    # Rotate x-axis labels for better readability
+    plt.xticks(rotation=45)
+
+    # Show the plot
+    plt.title('Total Minutes and Games Played per Season')
+    st.pyplot(fig2)
