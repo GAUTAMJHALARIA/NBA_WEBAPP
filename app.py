@@ -15,10 +15,10 @@ user_menu = st.sidebar.radio(
 
 if user_menu == 'Player-wise':
     col1, col2 = st.columns(2)
+    selected_player = st.sidebar.selectbox("Select Player", get_players_name_list())
     with col1:
         with st.container():
             st.header("Player About")
-            selected_player = st.selectbox("Select Player", get_players_name_list())
             image = get_player_img(selected_player)
             c1,c2 = st.columns(2)
             with c1:
@@ -28,15 +28,21 @@ if user_menu == 'Player-wise':
                     channels="RGB"
                 )
             with c2:
-                pass
+                st.write("going to implement common details for {}".format(selected_player))
 
 
 
     with col2:
         with st.container():
             tab1, tab2 = st.tabs(["Short Chart", "HeatMap"])
-            st.header("This is Container")
-            st.write("Content in  container of col 2")
+
+            with tab1:
+                st.header("This is Shortchart")
+                st.write("Short chart for {}".format(selected_player))
+
+            with tab2:
+                st.header("This is for heatmap")
+                st.write("Heat map for {}".format(selected_player))
 
 
 
