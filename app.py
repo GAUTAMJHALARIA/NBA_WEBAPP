@@ -4,16 +4,33 @@ import streamlit as st
 import numpy as np
 import seaborn as sns
 
-tab1,tab2 = st.tabs(["Player-wise", "Team-wise"])
-col1,col2 = st.columns(2)
+st.sidebar.title("NBA Analysis")
+user_menu = st.sidebar.radio(
+    'Select An Option',
+    ('Player-wise','Team-wise')
+)
 
-with tab1:
+if user_menu == 'Player-wise':
+    col1, col2 = st.columns(2)
+
     with col1:
         with st.container():
-            st.header("This is Tab 1")
-            st.write("Content in Tab 1's container of col 1")
+            st.header("Player About")
+            st.image(
+                image,
+                width=200,
+                channels="RGB"
+            )
+            st.selectbox("players", players_list)
+            image = get_player_img(2544)
 
     with col2:
         with st.container():
-            st.header("This is Tab 1")
-            st.write("Content in Tab 1's container of col 2")
+            tab1, tab2 = st.tabs(["Short Chart", "HeatMap"])
+            st.header("This is Container")
+            st.write("Content in  container of col 2")
+
+
+
+
+
