@@ -10,3 +10,7 @@ def get_player_img(player_name):
     pic = urlretrieve(url, img_file)
     player_img = plt.imread(pic[0])
     return player_img
+
+
+
+

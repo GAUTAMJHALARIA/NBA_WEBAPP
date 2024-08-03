@@ -4,7 +4,7 @@ import streamlit as st
 import numpy as np
 import seaborn as sns
 
-from NBA_DATA import get_players_name_list
+from NBA_DATA import *
 from helper import get_player_img
 
 st.sidebar.title("NBA Analysis")
@@ -24,11 +24,20 @@ if user_menu == 'Player-wise':
             with c1:
                 st.image(
                     image,
-                    width =200,
+                    use_column_width= "auto",
                     channels="RGB"
+
                 )
             with c2:
-                st.write("going to implement common details for {}".format(selected_player))
+                age = get_player_age(selected_player)
+                st.markdown(f"**Age:** {age}")
+                country = get_player_country(selected_player)
+                st.markdown(f"**Country:** {country}")
+                position = get_player_position(selected_player)
+                st.markdown(f"**Position:** {position}")
+                school = get_player_school(selected_player)
+                st.markdown(f"**School:** {school}")
+
 
 
 
