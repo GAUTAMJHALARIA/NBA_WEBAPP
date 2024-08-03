@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8687a9e3-847e-4b8c-8ef9-9cfcda08fef4" name="Changes" comment="trying different stats visualizing chart and layout">
+    <list default="true" id="8687a9e3-847e-4b8c-8ef9-9cfcda08fef4" name="Changes" comment="made player selection global">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +22,20 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "GAUTAMJHALARIA"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="61404800-e9eb-48f5-9585-6e17939ddd9a" />
+        <option name="url" value="https://github.com/GAUTAMJHALARIA/NBA_WEBAPP.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -36,15 +49,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/jhala/PROJECTS/ALL_ABOUT_NBA/NBA WEBAPP&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.app.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/jhala/PROJECTS/ALL_ABOUT_OLYMPICS/olympics-analysis-web-app"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -189,7 +202,95 @@
       <option name="project" value="LOCAL" />
       <updated>1722173674413</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="trying different stats visualizing chart and layout">
+      <option name="closed" value="true" />
+      <created>1722270758494</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1722270758494</updated>
+    </task>
+    <task id="LOCAL-00018" summary="renamed app to trial_app">
+      <option name="closed" value="true" />
+      <created>1722528606880</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1722528606880</updated>
+    </task>
+    <task id="LOCAL-00019" summary="created app.py">
+      <option name="closed" value="true" />
+      <created>1722528657679</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1722528657679</updated>
+    </task>
+    <task id="LOCAL-00020" summary="trying tabs feature">
+      <option name="closed" value="true" />
+      <created>1722533447809</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1722533447809</updated>
+    </task>
+    <task id="LOCAL-00021" summary="created NBA_DATA">
+      <option name="closed" value="true" />
+      <created>1722604416720</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1722604416720</updated>
+    </task>
+    <task id="LOCAL-00022" summary="trying sidebar and tabs for layout">
+      <option name="closed" value="true" />
+      <created>1722604462100</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1722604462100</updated>
+    </task>
+    <task id="LOCAL-00023" summary="created helper.py">
+      <option name="closed" value="true" />
+      <created>1722614720941</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1722614720941</updated>
+    </task>
+    <task id="LOCAL-00024" summary="implemented get_player_name_list and get_id functions">
+      <option name="closed" value="true" />
+      <created>1722618912745</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1722618912745</updated>
+    </task>
+    <task id="LOCAL-00025" summary="implemented get_player_img function">
+      <option name="closed" value="true" />
+      <created>1722618951615</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1722618951615</updated>
+    </task>
+    <task id="LOCAL-00026" summary="implementing about player section">
+      <option name="closed" value="true" />
+      <created>1722618980849</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1722618980849</updated>
+    </task>
+    <task id="LOCAL-00027" summary="made player selection global">
+      <option name="closed" value="true" />
+      <created>1722620221028</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1722620221028</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -211,6 +312,16 @@
     <MESSAGE value="created Preprocessor function" />
     <MESSAGE value="implemented Preprocessor function on the dataset" />
     <MESSAGE value="trying different stats visualizing chart and layout" />
-    <option name="LAST_COMMIT_MESSAGE" value="trying different stats visualizing chart and layout" />
+    <MESSAGE value="renamed app to trial_app" />
+    <MESSAGE value="created app.py" />
+    <MESSAGE value="trying tabs feature" />
+    <MESSAGE value="created NBA_DATA" />
+    <MESSAGE value="trying sidebar and tabs for layout" />
+    <MESSAGE value="created helper.py" />
+    <MESSAGE value="implemented get_player_name_list and get_id functions" />
+    <MESSAGE value="implemented get_player_img function" />
+    <MESSAGE value="implementing about player section" />
+    <MESSAGE value="made player selection global" />
+    <option name="LAST_COMMIT_MESSAGE" value="made player selection global" />
   </component>
 </project>
