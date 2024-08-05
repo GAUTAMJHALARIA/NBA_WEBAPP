@@ -57,3 +57,5 @@ if user_menu == 'Player-wise':
             with tab2:
                 st.header("This is for heatmap")
                 st.write("Heat map for {}".format(selected_player))
+                draw_court(ax, outer_lines=False)
+                st.pyplot(fig)
