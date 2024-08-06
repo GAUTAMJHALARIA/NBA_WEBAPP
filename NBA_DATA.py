@@ -1,6 +1,8 @@
 from nba_api.stats.static import players
 from datetime import datetime
 from nba_api.stats.endpoints import commonplayerinfo
+from nba_api.stats.endpoints import playercareerstats
+from nba_api.stats.endpoints import shotchartdetail
 
 def get_players_name_list():
     players_info = players.get_players()
@@ -44,3 +46,17 @@ def get_player_school(player_name):
     player_info = commonplayerinfo.CommonPlayerInfo(player_id=player_id).get_dict()
     school = player_info['resultSets'][0]['rowSet'][0][8]
     return school
+
+def player_shotchart_detail(player_name,season_id):
+    player_id = get_id(player_name)
+    career_df = playercareerstats.PlayerCareerStats(player_id=player_id).get_data_frames()[0]
+    team_id = career_df[career_df["SEASON_ID"] == season_id]['TEAM_ID']
+    shot_chart_df = shotchartdetail.ShotChartDetail(team_id =team_id,
+                                                    player_id = player_id,
+                                                    season_nullable= season_id,
+                                                    season_type_all_star= 'Regular Season',
+                                                    context_measure_simple= 'FGA'
+                                                    )
+
+    return shot_chart_df[0],shot_chart_df[1]
+
