@@ -1,7 +1,13 @@
+import seaborn as sns
+import pandas as pd
 from NBA_DATA import get_id
 from urllib.request import urlretrieve
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Rectangle, Arc
+from matplotlib.patches import Circle, Rectangle, Arc, PathPatch
+from matplotlib.collections import PatchCollection
+from matplotlib.path import Path
+from matplotlib.colors import LinearSegmentedColormap, ListedColormap, BoundaryNorm
+from scipy.stats import percentileofscore
 
 
 def get_player_img(player_name):
@@ -63,5 +69,47 @@ def draw_court(ax=None, color="black", lw=1, outer_lines=False):
 
     for element in court_elements:
         ax.add_patch(element)
+
+    return ax
+
+
+def shot_chart(data, title="", xlim=(-250, 250), ylim=(422.5, -47.5), line_color="blue", court_color="white",
+               court_lw=2, outer_lines=False, flip_court=False, gridsize=None, ax=None, despine=False):
+    if ax is None:
+        ax = plt.gca()
+
+    if not flip_court:
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+    else:
+        ax.set_xlim(xlim[::-1])
+        ax.set_ylim(ylim[::-1])
+
+    ax.tick_params(labelbottom="off", labelleft="off")
+    ax.set_title(title, fontsize=18)
+
+    # draws the court
+    draw_court(ax, color=line_color, lw=court_lw, outer_lines=outer_lines)
+
+    # separate color by make or miss
+
+    x_missed = data[data['EVENT_TYPE'] == 'Missed Shot']['LOC_X']
+    y_missed = data[data['EVENT_TYPE'] == 'Missed Shot']['LOC_Y']
+
+    x_made = data[data['EVENT_TYPE'] == 'Made Shot']['LOC_X']
+    y_made = data[data['EVENT_TYPE'] == 'Made Shot']['LOC_Y']
+
+    ax.scatter(x_missed, y_missed, c='r', marker="x", s=300, linewidth=3, alpha=0.4)
+    ax.scatter(x_made, y_made, facecolors='none', edgecolors='g', marker='o', s=100, linewidths=3, alpha=0.4)
+    # set the spine to match the rest of court lines , makes outerlines somewhaat unnecessary
+
+    for spine in ax.spines:
+        ax.spines[spine].set_lw(court_lw)
+        ax.spines[spine].set_color(line_color)
+    if despine:
+        ax.spines["top"].set_visible(False)
+        ax.spines["bottom"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_visible(False)
 
     return ax
