@@ -1,5 +1,7 @@
 import seaborn as sns
 import pandas as pd
+import streamlit
+
 from NBA_DATA import get_id
 from urllib.request import urlretrieve
 import matplotlib.pyplot as plt
@@ -144,6 +146,116 @@ def heatmap(data, title="", color="b",
 
     draw_court(ax, color=line_color, lw=court_lw, outer_lines=outer_lines)
     plt.gca().set_facecolor('black')
+    # Set the spines to match the rest of court lines, makes outer_lines
+    # somewhate unnecessary
+    for spine in ax.spines:
+        ax.spines[spine].set_lw(court_lw)
+        ax.spines[spine].set_color(line_color)
+
+    if despine:
+        ax.spines["top"].set_visible(False)
+        ax.spines["bottom"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+
+    return ax
+
+
+def sized_hexbin(ax, hc, hc2, cmap, norm):
+    offsets = hc.get_offsets()
+    orgpath = hc.get_paths()[0]
+    verts = orgpath.vertices
+    values1 = hc.get_array()
+    values2 = hc2.get_array()
+    ma = values1.max()
+    patches = []
+
+    for offset, val in zip(offsets, values1):
+        # Adding condition for minimum size
+        # offset is the respective position of each hexagons
+
+        # remove 0 to compare frequency without 0s
+        filtered_list = list(filter(lambda num: num != 0, values1))
+
+        # we also skip frequency counts that are 0s
+        # this is to discount hexbins with no occurences
+        # default value hexagons are the frequencies
+        if (int(val) == 0):
+            continue
+        elif (percentileofscore(filtered_list, val) < 33.33):
+            # print(percentileofscore(values1, val))
+            # print("bot")
+            v1 = verts * 0.3 + offset
+        elif (percentileofscore(filtered_list, val) > 69.99):
+            # print(percentileofscore(values1, val))
+            # print("top")
+            v1 = verts + offset
+        else:
+            # print("mid")
+            v1 = verts * 0.6 + offset
+
+        path = Path(v1, orgpath.codes)
+        patch = PathPatch(path)
+        patches.append(patch)
+
+    pc = PatchCollection(patches, cmap=cmap, norm=norm)
+    # sets color
+    # so hexbin with C=data['FGP']
+    pc.set_array(values2)
+
+    ax.add_collection(pc)
+    hc.remove()
+    hc2.remove()
+
+
+def hexmap_chart(data, league_avg, title="", color="b",
+                 xlim=(-250, 250), ylim=(422.5, -47.5), line_color="white",
+                 court_color="#1a477b", court_lw=2, outer_lines=False,
+                 flip_court=False, gridsize=None,
+                 ax=None, despine=False, **kwargs):
+
+    LA = league_avg.loc[:, ['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE', 'FGA', 'FGM']].groupby(
+        ['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE']).sum()
+    LA['FGP'] = 1.0 * LA['FGM'] / LA['FGA']
+    player = data.groupby(['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE', 'SHOT_MADE_FLAG']).size().unstack(fill_value=0)
+    player['FGP'] =  1.0* player[1] / player.sum(axis=1)
+    player_vs_league = (player.loc[:, 'FGP'] - LA.loc[:, 'FGP']) * 100
+
+    data = pd.merge(data, player_vs_league, on=['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE'], how='right')
+
+    if ax is None:
+        ax = plt.gca()
+        ax.set_facecolor(court_color)
+
+    if not flip_court:
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+    else:
+        ax.set_xlim(xlim[::-1])
+        ax.set_ylim(ylim[::-1])
+
+    ax.tick_params(labelbottom="off", labelleft="off")
+    ax.set_title(title, fontsize=18)
+
+    # draws the court
+    draw_court(ax, color=line_color, lw=court_lw, outer_lines=outer_lines)
+
+    x = data['LOC_X']
+    y = data['LOC_Y']
+
+    # for diverging color map
+    colors = ['#2b7cb6', '#abd9e9', '#ffffbf', '#fdaf61', '#d7191c']
+    cmap = ListedColormap(colors)
+    # The 5 colors are separated by -9, -3, 0, 3, 9
+    boundaries = [-9, -3, 0, 3, 9]
+    norm = BoundaryNorm(boundaries, cmap.N, clip=True)
+
+    # first hexbin required for bincount
+    # second hexbin for the coloring of each hexagons
+    hexbin = ax.hexbin(x, y, gridsize=40, cmap=cmap, norm=norm, extent=[-275, 275, -50, 425])
+    hexbin2 = ax.hexbin(x, y, C=data['FGP'], gridsize=40, cmap=cmap, norm=norm, extent=[-275, 275, -50, 425])
+    sized_hexbin(ax, hexbin, hexbin2, cmap, norm)
+
     # Set the spines to match the rest of court lines, makes outer_lines
     # somewhate unnecessary
     for spine in ax.spines:
