@@ -113,3 +113,47 @@ def shot_chart(data, title="", xlim=(-250, 250), ylim=(422.5, -47.5), line_color
         ax.spines["left"].set_visible(False)
 
     return ax
+
+
+def heatmap(data, title="", color="b",
+            xlim=(-250, 250), ylim=(422.5, -47.5), line_color="white",
+            court_color="white", court_lw=2, outer_lines=False,
+            flip_court=False, gridsize=None,
+            ax=None, despine=False, **kwargs):
+    if ax is None:
+        ax = plt.gca()
+
+    if not flip_court:
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+    else:
+        ax.set_xlim(xlim[::-1])
+        ax.set_ylim(ylim[::-1])
+
+    ax.tick_params(labelbottom="off", labelleft="off")
+    ax.set_title(title, fontsize=18)
+
+    # draws the court
+
+    x = data['LOC_X']
+    y = data['LOC_Y']
+
+    sns.kdeplot(x=x, y=y, fill=True, cmap='inferno', ax=ax, alpha=1, n_levels=30, bw_adjust=1)
+
+    ax.scatter(x, y, facecolors='w', s=2, linewidths=0.1, **kwargs)
+
+    draw_court(ax, color=line_color, lw=court_lw, outer_lines=outer_lines)
+    plt.gca().set_facecolor('black')
+    # Set the spines to match the rest of court lines, makes outer_lines
+    # somewhate unnecessary
+    for spine in ax.spines:
+        ax.spines[spine].set_lw(court_lw)
+        ax.spines[spine].set_color(line_color)
+
+    if despine:
+        ax.spines["top"].set_visible(False)
+        ax.spines["bottom"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+
+    return ax
