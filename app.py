@@ -50,12 +50,11 @@ if user_menu == 'Player-wise':
                 st.pyplot(fig1)
 
             with tab2:
-                st.header("heatmap")
-                # fig2,ax2 = plt.subplots()
-                # shot_chart_df, league_avg = player_shotchart_detail(player_name=selected_player,
-                #                                                     season_id=selected_season)
-                # hexmap_chart(shot_chart_df,league_avg = league_avg)
-                # st.pyplot(fig2)
+                fig2,ax2 = plt.subplots()
+                shot_chart_df, league_avg = player_shotchart_detail(player_name=selected_player,
+                                                                    season_id=selected_season)
+                heatmap(shot_chart_df)
+                st.pyplot(fig2)
 
 
     st.header("Some other player statistic chart")
