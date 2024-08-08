@@ -14,7 +14,7 @@ user_menu = st.sidebar.radio(
 )
 
 if user_menu == 'Player-wise':
-    col1, col2 = st.columns(2,vertical_alignment="top",gap="large")
+    col1, col2 = st.columns(2, vertical_alignment="top", gap="large")
     selected_player = st.sidebar.selectbox("Select Player", get_players_name_list())
     with col1:
         with st.container():
@@ -40,21 +40,25 @@ if user_menu == 'Player-wise':
 
     with col2:
         with st.container():
-            tab1, tab2 = st.tabs(["Short Chart", "HeatMap"])
+            tab1, tab2, tab3 = st.tabs(["Short Chart", "HeatMap", "Hexmap"])
             season_id = get_season_id_list(selected_player)
             selected_season = st.selectbox("select season", season_id)
             with tab1:
-                fig1,ax1 = plt.subplots()
-                shot_chart_df,league_avg = player_shotchart_detail(player_name=selected_player,season_id=selected_season)
-                shot_chart(line_color="black",data=shot_chart_df)
+                fig1, ax1 = plt.subplots()
+                shot_chart_df, league_avg = player_shotchart_detail(player_name=selected_player,
+                                                                    season_id=selected_season)
+                shot_chart(line_color="black", data=shot_chart_df)
                 st.pyplot(fig1)
 
             with tab2:
-                fig2,ax2 = plt.subplots()
-                shot_chart_df, league_avg = player_shotchart_detail(player_name=selected_player,
-                                                                    season_id=selected_season)
+                fig2, ax2 = plt.subplots()
                 heatmap(shot_chart_df)
                 st.pyplot(fig2)
+
+            with tab3:
+                    fig3,ax3 = plt.subplots()
+                    hexmap_chart(shot_chart_df,league_avg)
+                    st.pyplot(fig3)
 
 
     st.header("Some other player statistic chart")
