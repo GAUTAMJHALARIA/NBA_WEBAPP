@@ -56,9 +56,32 @@ if user_menu == 'Player-wise':
                 st.pyplot(fig2)
 
             with tab3:
-                    fig3,ax3 = plt.subplots()
-                    hexmap_chart(shot_chart_df,league_avg)
-                    st.pyplot(fig3)
-
+                fig3, ax3 = plt.subplots()
+                hexmap_chart(shot_chart_df, league_avg)
+                st.pyplot(fig3)
 
     st.header("Some other player statistic chart")
+    t1, t2, t3, t4, t5, t6, t7, t8, t9, t10 = st.tabs(
+        ["MIN", "PTS", "FG_PCT", "FG3M", "FT_PCT", "REB", "AST", "STL", "BLK", "TOV"])
+
+    with t1:
+        pass
+    with t2:
+        pass
+    with t3:
+        pass
+    with t4:
+        pass
+    with t5:
+        pass
+    with t6:
+        pass
+    with t7:
+        pass
+    with t8:
+        pass
+    with t9:
+        pass
+    with t10:
+        pass
+
