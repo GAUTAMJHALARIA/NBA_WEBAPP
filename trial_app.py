@@ -4,6 +4,7 @@ from urllib.request import urlretrieve
 from nba_api.stats.static import players
 from nba_api.stats.endpoints import shotchartdetail
 from nba_api.stats.endpoints import playercareerstats
+import plotly.graph_objs as go
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -274,3 +275,72 @@ with co2:
     # Show the plot
     plt.title('Total Minutes and Games Played per Season')
     st.pyplot(fig2)
+
+st.header("Some other player statistic chart")
+t1, t2, t3, t4, t5, t6, t7, t8, t9, t10 = st.tabs(
+    ["MIN", "PTS", "FG_PCT", "FG3M", "FT_PCT", "REB", "AST", "STL", "BLK", "TOV"])
+
+with t1:
+    player_id = '2544'  # Replace with the player's ID
+    career = playercareerstats.PlayerCareerStats(player_id=player_id)
+    stats = career.get_data_frames()[0]
+
+    # Filter data for relevant columns
+    df = stats[['SEASON_ID', 'MIN', 'GP']].copy()
+    df['SEASON_ID'] = df['SEASON_ID'].apply(lambda x: int(x.split('-')[0]))
+
+    trace1 = go.Scatter(
+        x=df['SEASON_ID'],
+        y=df['MIN'],
+        mode='lines+markers',
+        name='Total Minutes',
+        line=dict(color='blue'),
+        marker=dict(size=8),
+        hovertemplate='Season: %{x}<br>Total Minutes: %{y}<extra></extra>',
+
+    )
+    text = [g for g in zip(df['GP'])],
+    trace2 = go.Bar(
+        x=df['SEASON_ID'],
+        y=df['GP'] * 20,
+        name='Games Played',
+        marker=dict(color='brown'),
+        opacity=0.6,
+        hovertemplate=('Season: %{x}<br>Games Played: %{customdata} <extra></extra>'),
+        customdata=df['GP']
+    )
+
+    # Create the layout
+    layout = go.Layout(
+        title='NBA Player Minutes and Games Played Over Seasons',
+        xaxis=dict(title='Season'),
+        yaxis=dict(title='Total Minutes', tickvals=[1000, 2000, 3000]),
+        yaxis2=dict(title='Games Played', overlaying='y', side='right'),
+        legend=dict(x=0.1, y=1.1, orientation='h'),
+    )
+
+    # Create the figure
+
+    fig = go.Figure(data=[trace1, trace2], layout=layout)
+
+    # Display the figure
+    st.plotly_chart(fig)
+
+with t2:
+    pass
+with t3:
+    pass
+with t4:
+    pass
+with t5:
+    pass
+with t6:
+    pass
+with t7:
+    pass
+with t8:
+    pass
+with t9:
+    pass
+with t10:
+    pass
