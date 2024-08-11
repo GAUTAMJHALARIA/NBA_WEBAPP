@@ -62,26 +62,26 @@ if user_menu == 'Player-wise':
 
     st.header("Some other player statistic chart")
     t1, t2, t3, t4, t5, t6, t7, t8, t9, t10 = st.tabs(
-        ["MIN", "PTS", "FG_PCT", "FG3M", "FT_PCT", "REB", "AST", "STL", "BLK", "TOV"])
+        ["MIN", "PTS", "FG_PCT", "FG3_PCT", "FT_PCT", "REB", "AST", "STL", "BLK", "TOV"])
 
     with t1:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"MIN"))
     with t2:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"PTS"))
     with t3:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"FG_PCT"))
     with t4:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"FG3_PCT"))
     with t5:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"FT_PCT"))
     with t6:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"REB"))
     with t7:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"AST"))
     with t8:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"STL"))
     with t9:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"BLK"))
     with t10:
-        pass
+        st.plotly_chart(line_bar_plot(selected_player,"TOV"))
 
