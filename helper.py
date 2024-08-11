@@ -1,8 +1,8 @@
 import seaborn as sns
 import pandas as pd
-import streamlit
+import plotly.graph_objs as go
 
-from NBA_DATA import get_id
+from NBA_DATA import *
 from urllib.request import urlretrieve
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Rectangle, Arc, PathPatch
@@ -213,12 +213,11 @@ def hexmap_chart(data, league_avg, title="", color="b",
                  court_color="#1a477b", court_lw=2, outer_lines=False,
                  flip_court=False, gridsize=None,
                  ax=None, despine=False, **kwargs):
-
     LA = league_avg.loc[:, ['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE', 'FGA', 'FGM']].groupby(
         ['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE']).sum()
     LA['FGP'] = 1.0 * LA['FGM'] / LA['FGA']
     player = data.groupby(['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE', 'SHOT_MADE_FLAG']).size().unstack(fill_value=0)
-    player['FGP'] =  1.0* player[1] / player.sum(axis=1)
+    player['FGP'] = 1.0 * player[1] / player.sum(axis=1)
     player_vs_league = (player.loc[:, 'FGP'] - LA.loc[:, 'FGP']) * 100
 
     data = pd.merge(data, player_vs_league, on=['SHOT_ZONE_AREA', 'SHOT_ZONE_RANGE'], how='right')
@@ -269,3 +268,42 @@ def hexmap_chart(data, league_avg, title="", color="b",
         ax.spines["left"].set_visible(False)
 
     return ax
+
+
+def line_bar_plot(player_name, stat):
+    player_id = get_id(player_name)
+    career = playercareerstats.PlayerCareerStats(player_id=player_id)
+    stats = career.get_data_frames()[0]
+
+    df = stats[
+        ["SEASON_ID", "GP", "MIN", "FG_PCT", "FG3_PCT", "FT_PCT", "OREB", "DREB", "REB", "AST", "STL", "BLK", "TOV",
+         "PTS", "PF"]].copy()
+    df['SEASON_ID'] = df['SEASON_ID'].apply(lambda x: int(x.split('-')[0]))
+
+    plot1 = go.Scatter(
+        x=df['SEASON_ID'],
+        y=df[stat],
+        mode='lines+markers',
+        name=stat,
+        line=dict(color='blue'),
+        marker=dict(size=8),
+        hovertemplate='%{y}<extra></extra>'
+    )
+    plot2 = go.Bar(
+        x=df['SEASON_ID'],
+        y=df['GP'] * 20,
+        name='Games Played',
+        marker=dict(color='brown'),
+        opacity=0.6,
+        hovertemplate='Season: %{x}<br>Games Played: %{customdata} <extra></extra>',
+        customdata=df['GP']
+    )
+    layout = go.Layout(
+        xaxis=dict(title='Season', tickvals = df['SEASON_ID']),
+        yaxis=dict(title='Total {}'.format(stat)),
+        yaxis2=dict(title='Games Played', overlaying='y', side='right'),
+        legend=dict(x=0.1, y=1.1, orientation='h'),
+    )
+
+    fig = go.Figure(data=[plot1, plot2], layout=layout)
+    return fig
