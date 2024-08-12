@@ -56,32 +56,39 @@ if user_menu == 'Player-wise':
                 st.pyplot(fig2)
 
             with tab3:
-                fig3, ax3 = plt.subplots()
+                fig3,ax3= plt.subplots()
                 hexmap_chart(shot_chart_df, league_avg)
                 st.pyplot(fig3)
 
-    st.header("Some other player statistic chart")
     t1, t2, t3, t4, t5, t6, t7, t8, t9, t10 = st.tabs(
         ["MIN", "PTS", "FG_PCT", "FG3_PCT", "FT_PCT", "REB", "AST", "STL", "BLK", "TOV"])
 
     with t1:
-        st.plotly_chart(line_bar_plot(selected_player,"MIN"))
+        st.plotly_chart(line_bar_plot(selected_player,"MIN",title ='Total Minutes',scale =20))
     with t2:
-        st.plotly_chart(line_bar_plot(selected_player,"PTS"))
+        st.plotly_chart(line_bar_plot(selected_player,"PTS",title="Total Points",scale =20))
     with t3:
-        st.plotly_chart(line_bar_plot(selected_player,"FG_PCT"))
+        st.plotly_chart(line_bar_plot(selected_player,"FG_PCT",title = "Field Goal%",scale =1/150))
     with t4:
-        st.plotly_chart(line_bar_plot(selected_player,"FG3_PCT"))
+        st.plotly_chart(line_bar_plot(selected_player,"FG3_PCT",title="Field Goal 3%",scale = 1/150))
     with t5:
-        st.plotly_chart(line_bar_plot(selected_player,"FT_PCT"))
+        st.plotly_chart(line_bar_plot(selected_player,"FT_PCT",title = "Free Throw%",scale = 1/150))
     with t6:
-        st.plotly_chart(line_bar_plot(selected_player,"REB"))
+        st.plotly_chart(line_bar_plot(selected_player,"REB",title = "Total Rebounds",scale =5))
     with t7:
-        st.plotly_chart(line_bar_plot(selected_player,"AST"))
+        st.plotly_chart(line_bar_plot(selected_player,"AST",title="Total Assist", scale = 5))
     with t8:
-        st.plotly_chart(line_bar_plot(selected_player,"STL"))
+        st.plotly_chart(line_bar_plot(selected_player,"STL",title="Total Steals",scale =1))
     with t9:
-        st.plotly_chart(line_bar_plot(selected_player,"BLK"))
+        st.plotly_chart(line_bar_plot(selected_player,"BLK",title = "Total Blocks",scale =1))
     with t10:
-        st.plotly_chart(line_bar_plot(selected_player,"TOV"))
+        st.plotly_chart(line_bar_plot(selected_player,"TOV", title = "Total Turnover",scale =5))
 
+
+    column1 , column2 = st.columns(2,gap="large")
+
+    with column1:
+        st.header("Radar Chart")
+
+    with  column2:
+        st.header("Another Chart")

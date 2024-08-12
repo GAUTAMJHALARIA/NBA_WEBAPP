@@ -270,7 +270,7 @@ def hexmap_chart(data, league_avg, title="", color="b",
     return ax
 
 
-def line_bar_plot(player_name, stat):
+def line_bar_plot(player_name, stat,title,scale):
     player_id = get_id(player_name)
     career = playercareerstats.PlayerCareerStats(player_id=player_id)
     stats = career.get_data_frames()[0]
@@ -291,7 +291,7 @@ def line_bar_plot(player_name, stat):
     )
     plot2 = go.Bar(
         x=df['SEASON_ID'],
-        y=df['GP'] * 20,
+        y=df['GP'] * scale,
         name='Games Played',
         marker=dict(color='brown'),
         opacity=0.6,
@@ -300,7 +300,7 @@ def line_bar_plot(player_name, stat):
     )
     layout = go.Layout(
         xaxis=dict(title='Season', tickvals = df['SEASON_ID']),
-        yaxis=dict(title='Total {}'.format(stat)),
+        yaxis=dict(title=title.format(stat)),
         yaxis2=dict(title='Games Played', overlaying='y', side='right'),
         legend=dict(x=0.1, y=1.1, orientation='h'),
     )
