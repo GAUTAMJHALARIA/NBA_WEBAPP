@@ -16,6 +16,8 @@ user_menu = st.sidebar.radio(
 if user_menu == 'Player-wise':
     col1, col2 = st.columns(2, vertical_alignment="top", gap="large")
     selected_player = st.sidebar.selectbox("Select Player", get_players_name_list())
+    season_id = get_season_id_list(selected_player)
+    selected_season = st.sidebar.selectbox("select season", season_id)
     with col1:
         with st.container():
             st.header("Player About")
@@ -41,8 +43,6 @@ if user_menu == 'Player-wise':
     with col2:
         with st.container():
             tab1, tab2, tab3 = st.tabs(["Short Chart", "HeatMap", "Hexmap"])
-            season_id = get_season_id_list(selected_player)
-            selected_season = st.selectbox("select season", season_id)
             with tab1:
                 fig1, ax1 = plt.subplots()
                 shot_chart_df, league_avg = player_shotchart_detail(player_name=selected_player,
@@ -56,7 +56,7 @@ if user_menu == 'Player-wise':
                 st.pyplot(fig2)
 
             with tab3:
-                fig3,ax3= plt.subplots()
+                fig3, ax3 = plt.subplots()
                 hexmap_chart(shot_chart_df, league_avg)
                 st.pyplot(fig3)
 
@@ -64,31 +64,32 @@ if user_menu == 'Player-wise':
         ["MIN", "PTS", "FG_PCT", "FG3_PCT", "FT_PCT", "REB", "AST", "STL", "BLK", "TOV"])
 
     with t1:
-        st.plotly_chart(line_bar_plot(selected_player,"MIN",title ='Total Minutes',scale =20))
+        st.plotly_chart(line_bar_plot(selected_player, "MIN", title='Total Minutes', scale=20))
     with t2:
-        st.plotly_chart(line_bar_plot(selected_player,"PTS",title="Total Points",scale =20))
+        st.plotly_chart(line_bar_plot(selected_player, "PTS", title="Total Points", scale=20))
     with t3:
-        st.plotly_chart(line_bar_plot(selected_player,"FG_PCT",title = "Field Goal%",scale =1/150))
+        st.plotly_chart(line_bar_plot(selected_player, "FG_PCT", title="Field Goal%", scale=1 / 150))
     with t4:
-        st.plotly_chart(line_bar_plot(selected_player,"FG3_PCT",title="Field Goal 3%",scale = 1/150))
+        st.plotly_chart(line_bar_plot(selected_player, "FG3_PCT", title="Field Goal 3%", scale=1 / 150))
     with t5:
-        st.plotly_chart(line_bar_plot(selected_player,"FT_PCT",title = "Free Throw%",scale = 1/150))
+        st.plotly_chart(line_bar_plot(selected_player, "FT_PCT", title="Free Throw%", scale=1 / 150))
     with t6:
-        st.plotly_chart(line_bar_plot(selected_player,"REB",title = "Total Rebounds",scale =5))
+        st.plotly_chart(line_bar_plot(selected_player, "REB", title="Total Rebounds", scale=5))
     with t7:
-        st.plotly_chart(line_bar_plot(selected_player,"AST",title="Total Assist", scale = 5))
+        st.plotly_chart(line_bar_plot(selected_player, "AST", title="Total Assist", scale=5))
     with t8:
-        st.plotly_chart(line_bar_plot(selected_player,"STL",title="Total Steals",scale =1))
+        st.plotly_chart(line_bar_plot(selected_player, "STL", title="Total Steals", scale=1))
     with t9:
-        st.plotly_chart(line_bar_plot(selected_player,"BLK",title = "Total Blocks",scale =1))
+        st.plotly_chart(line_bar_plot(selected_player, "BLK", title="Total Blocks", scale=1))
     with t10:
-        st.plotly_chart(line_bar_plot(selected_player,"TOV", title = "Total Turnover",scale =5))
+        st.plotly_chart(line_bar_plot(selected_player, "TOV", title="Total Turnover", scale=5))
 
+    # column1, column2 = st.columns(2, gap="large")
+    #
+    # with column1:
+    fig4,ax4 = plt.subplots(figsize = (25,20))
+    fig4 =radar_chart(selected_player, selected_season)
+    st.plotly_chart(fig4)
 
-    column1 , column2 = st.columns(2,gap="large")
-
-    with column1:
-        st.header("Radar Chart")
-
-    with  column2:
-        st.header("Another Chart")
+    # with  column2:
+    #     st.header("Another Chart")
