@@ -347,7 +347,12 @@ def radar_chart(player_name,season):
     # Set up layout with slider
     layout = go.Layout(
         polar=dict(
-            radialaxis=dict(visible=True, range=[0, 1])
+            bgcolor='black',  # Background color of the radar chart
+            radialaxis=dict(visible=True, range=[0, 1],color='white'),
+            angularaxis=dict(
+                visible=True,
+                color='white'  # Color of the angular axis
+            )
         ),
         title= "Players Interval stats",
         showlegend=True,
@@ -365,7 +370,7 @@ def radar_chart(player_name,season):
                     ]
                 } for i in range(len(game_stats))
             ]
-        }]
+        }],
     )
 
     # Create the figure and show it
