@@ -307,3 +307,68 @@ def line_bar_plot(player_name, stat,title,scale):
 
     fig = go.Figure(data=[plot1, plot2], layout=layout)
     return fig
+
+def radar_chart(player_name,season):
+    game_stats = get_player_gamelogs(player_name,season)
+    relevant_stats = ['PTS', 'AST', 'REB', 'STL', 'BLK', 'TOV', 'MIN', 'FG_PCT', 'FT_PCT', 'FG3M']
+
+    season_stats = game_stats[relevant_stats].mean()
+    def normalize_data(stats, stats_min, stats_max):
+        return (stats - stats_min) / (stats_max - stats_min)
+
+    normalized_season_stats = normalize_data(season_stats, season_stats.min(), season_stats.max())
+
+
+    plot1 = go.Scatterpolar(
+        r=normalized_season_stats.tolist() + [normalized_season_stats.tolist()[0]],  # Complete the loop
+        theta=relevant_stats + [relevant_stats[0]],  # Complete the loop
+        name='Season',
+        line_color= 'blue'
+    )
+
+    # Function to update interval stats
+    def get_interval_trace(interval_size):
+        interval_stats = game_stats[relevant_stats].head(interval_size).mean()
+        normalized_interval_stats = normalize_data(interval_stats, season_stats.min(), season_stats.max())
+        return normalized_interval_stats.tolist() + [normalized_interval_stats.tolist()[0]]  # Complete the loop
+
+    # Initial interval size
+    initial_interval_size = 5
+    plot2_r_values = get_interval_trace(initial_interval_size)
+
+    # Create the plot for interval stats
+    plot2 = go.Scatterpolar(
+        r=plot2_r_values,
+        theta=relevant_stats + [relevant_stats[0]],  # Complete the loop
+        name=f'Interval',
+        line_color='red'
+    )
+
+    # Set up layout with slider
+    layout = go.Layout(
+        polar=dict(
+            radialaxis=dict(visible=True, range=[0, 1])
+        ),
+        title= "Players Interval stats",
+        showlegend=True,
+        sliders=[{
+            'active': initial_interval_size - 1,
+            'currentvalue': {"prefix": "Interval Size: "},
+            'pad': {"b": 10},
+            'steps': [
+                {
+                    'label': f'Last {i + 1} Games',
+                    'method': 'restyle',
+                    'args': [
+                        {'r': [get_interval_trace(i + 1)]},
+                        [1]  # Target the second trace (interval trace)
+                    ]
+                } for i in range(len(game_stats))
+            ]
+        }]
+    )
+
+    # Create the figure and show it
+    fig = go.Figure(data=[plot1, plot2], layout=layout)
+    return fig
+
