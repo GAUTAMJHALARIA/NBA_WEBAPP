@@ -8,6 +8,7 @@ import plotly.graph_objs as go
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from NBA_DATA import *
 from matplotlib import cm
 from matplotlib.patches import Circle, Rectangle, Arc, ConnectionPatch, Polygon, PathPatch
 from matplotlib.collections import PatchCollection

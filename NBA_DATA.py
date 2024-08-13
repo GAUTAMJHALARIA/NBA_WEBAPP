@@ -3,7 +3,15 @@ from datetime import datetime
 from nba_api.stats.endpoints import commonplayerinfo
 from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.endpoints import shotchartdetail
+from nba_api.stats.endpoints import playergamelog
 
+
+def get_player_gamelogs(player_name,season):
+    player_id = get_id(player_name)
+    player_gamelog = playergamelog.PlayerGameLog(player_id=player_id,season = season)
+    game_stats = player_gamelog.get_data_frames()[0]
+
+    return game_stats
 
 def get_season_id_list(player_name):
     player_id = get_id(player_name=player_name)
