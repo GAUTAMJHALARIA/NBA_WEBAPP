@@ -10,8 +10,7 @@ import pandas as pd
 
 
 def get_game_location_df(player_name, season):
-    player_id = get_id(player_name)
-    game_logs = get_player_gamelogs(player_id=player_id, season=season)
+    game_logs = get_player_gamelogs(player_name=player_name, season=season)
     game_id_list = list(game_logs["Game_ID"])
     home_team_id = []
     for game_id in game_id_list:
@@ -68,7 +67,15 @@ def get_game_location_df(player_name, season):
         'Vancouver': 'British Columbia',  # Canada, former Grizzlies team
         'Washington': 'District of Columbia',
         'Las Vegas': 'Nevada',  # No current NBA team, potential future expansion
-        'Louisville': 'Kentucky'  # No current NBA team, potential future expansion
+        'Louisville': 'Kentucky',  # No current NBA team, potential future expansion
+        'New Jersey': 'New Jersey',
+        'Akron': 'Ohio',  # Former home of the Akron Firestone Non-Skids, early NBL team
+        'Chicago Heights': 'Illinois',  # Former home of the Chicago Stags, early BAA team
+        'Flint': 'Michigan',  # Former home of the Flint Tropics, early NBL team
+        'Jersey City': 'New Jersey',  # Former home of the Jersey Reds, early NBL team
+        'Pittsburgh': 'Pennsylvania',  # Former home of the Pittsburgh Pirates (BAA team)
+        'Providence': 'Rhode Island',  # Former home of the Providence Steamrollers, early NBA team
+        'Utah': 'Utah'
     }
     state_abbrev = {
         'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA', 'Colorado': 'CO',
@@ -83,18 +90,21 @@ def get_game_location_df(player_name, season):
         'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY', 'Ontario': 'ON',
         'District of Columbia': 'DC'
     }
-    df = pd.DataFrame(city_list).value_counts().sort_values().reset_index().rename(columns={0:"City","count":"Game Played"})
+    df = pd.DataFrame(city_list).value_counts().sort_values().reset_index().rename(
+        columns={0: "City", "count": "Game Played"})
     states = []
-    for city in df["City"]:
-        states.append(nba_city_states[city])
+    for city in df["City"].str.split("/"):
+        states.append(nba_city_states[city[0]])
     df["State"] = states
-    state_iso2 = []
-    for state in df["State"]:
-        state_iso2.append(state_abbrev[state])
-    df["State_ISO2"] = state_iso2
 
     final_df = df.groupby("State")["Game Played"].sum().reset_index()
-    temp_df = df.groupby(["State","City"])["Game Played"].sum().reset_index()
+    state_iso2 = []
+    for state in final_df["State"]:
+        state_iso2.append(state_abbrev[state])
+    final_df["State_ISO2"] = state_iso2
+
+
+    temp_df = df.groupby(["State", "City"])["Game Played"].sum().reset_index()
 
     data = []
     for state in final_df["State"]:
@@ -104,7 +114,6 @@ def get_game_location_df(player_name, season):
     final_df["Data"] = data
 
     return final_df
-
 
 
 def get_player_gamelogs(player_name, season):
