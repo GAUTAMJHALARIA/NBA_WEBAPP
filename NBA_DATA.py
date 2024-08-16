@@ -4,20 +4,123 @@ from nba_api.stats.endpoints import commonplayerinfo
 from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.endpoints import shotchartdetail
 from nba_api.stats.endpoints import playergamelog
+from nba_api.stats.endpoints import BoxScoreSummaryV2
+
+import pandas as pd
 
 
-def get_player_gamelogs(player_name,season):
+def get_game_location_df(player_name, season):
     player_id = get_id(player_name)
-    player_gamelog = playergamelog.PlayerGameLog(player_id=player_id,season = season)
+    game_logs = get_player_gamelogs(player_id=player_id, season=season)
+    game_id_list = list(game_logs["Game_ID"])
+    home_team_id = []
+    for game_id in game_id_list:
+        game_info = BoxScoreSummaryV2(game_id=str(game_id))
+        home_team_id.append(game_info.game_summary.get_dict()['data'][0][6])
+
+    city_list = []
+    for i, game_id in zip(home_team_id, game_id_list):
+        game_info = BoxScoreSummaryV2(game_id=str(game_id))
+        temp_df = game_info.line_score.get_data_frame()
+        city_name = temp_df[temp_df["TEAM_ID"] == i]["TEAM_CITY_NAME"]
+        city_list.append(list(city_name)[0])
+
+    nba_city_states = {
+        'Atlanta': 'Georgia',
+        'Baltimore': 'Maryland',  # No current team, former Bullets
+        'Boston': 'Massachusetts',
+        'Brooklyn': 'New York',
+        'Charlotte': 'North Carolina',
+        'Chicago': 'Illinois',
+        'Cincinnati': 'Ohio',  # No current team, former Royals
+        'Cleveland': 'Ohio',
+        'Dallas': 'Texas',
+        'Denver': 'Colorado',
+        'Detroit': 'Michigan',
+        'Fort Wayne': 'Indiana',  # No current team, former Pistons
+        'Golden State': 'California',  # Warriors (current in San Francisco)
+        'Houston': 'Texas',
+        'Indiana': 'Indiana',
+        'Kansas City': 'Missouri',  # No current team, former Kings
+        'Los Angeles': 'California',  # For both Lakers and Clippers
+        'LA': 'California',
+        'Memphis': 'Tennessee',
+        'Miami': 'Florida',
+        'Milwaukee': 'Wisconsin',
+        'Minnesota': 'Minnesota',
+        'New Orleans': 'Louisiana',
+        'New York': 'New York',  # Knicks
+        'Newark': 'New Jersey',  # Former home of the Nets
+        'Oklahoma City': 'Oklahoma',
+        'Orlando': 'Florida',
+        'Philadelphia': 'Pennsylvania',
+        'Phoenix': 'Arizona',
+        'Portland': 'Oregon',
+        'Rochester': 'New York',  # No current team, former Royals
+        'Sacramento': 'California',
+        'Salt Lake City': 'Utah',
+        'San Antonio': 'Texas',
+        'San Diego': 'California',  # No current team, former Clippers
+        'Seattle': 'Washington',  # No current team, former SuperSonics
+        'St. Louis': 'Missouri',  # No current team, former Hawks
+        'Syracuse': 'New York',  # No current team, former Nationals
+        'Toronto': 'Ontario',  # Canada, only current Canadian team
+        'Vancouver': 'British Columbia',  # Canada, former Grizzlies team
+        'Washington': 'District of Columbia',
+        'Las Vegas': 'Nevada',  # No current NBA team, potential future expansion
+        'Louisville': 'Kentucky'  # No current NBA team, potential future expansion
+    }
+    state_abbrev = {
+        'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA', 'Colorado': 'CO',
+        'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
+        'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA',
+        'Maine': 'ME', 'Maryland': 'MD', 'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN',
+        'Mississippi': 'MS',
+        'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+        'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
+        'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+        'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA',
+        'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY', 'Ontario': 'ON',
+        'District of Columbia': 'DC'
+    }
+    df = pd.DataFrame(city_list).value_counts().sort_values().reset_index().rename(columns={0:"City","count":"Game Played"})
+    states = []
+    for city in df["City"]:
+        states.append(nba_city_states[city])
+    df["State"] = states
+    state_iso2 = []
+    for state in df["State"]:
+        state_iso2.append(state_abbrev[state])
+    df["State_ISO2"] = state_iso2
+
+    final_df = df.groupby("State")["Game Played"].sum().reset_index()
+    temp_df = df.groupby(["State","City"])["Game Played"].sum().reset_index()
+
+    data = []
+    for state in final_df["State"]:
+        data.append(temp_df[temp_df["State"] == state][["City", "Game Played"]].set_index("City").rename(
+            columns={"count": "Cities"}).to_dict())
+
+    final_df["Data"] = data
+
+    return final_df
+
+
+
+def get_player_gamelogs(player_name, season):
+    player_id = get_id(player_name)
+    player_gamelog = playergamelog.PlayerGameLog(player_id=player_id, season=season)
     game_stats = player_gamelog.get_data_frames()[0]
 
     return game_stats
+
 
 def get_season_id_list(player_name):
     player_id = get_id(player_name=player_name)
     career_df = playercareerstats.PlayerCareerStats(player_id=player_id).get_data_frames()[0]
     seasons = career_df["SEASON_ID"]
     return seasons
+
 
 def get_players_name_list():
     players_info = players.get_players()
