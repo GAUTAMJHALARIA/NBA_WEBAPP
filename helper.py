@@ -377,3 +377,33 @@ def radar_chart(player_name,season):
     fig = go.Figure(data=[plot1, plot2], layout=layout)
     return fig
 
+def game_choropleth_map(player_name,season):
+
+    df = get_game_location_df(player_name=player_name,season=season)
+    for col in df.columns:
+        df[col] = df[col].astype(str)
+
+    df['text'] = df['Data'] + '<br>'
+
+    fig = go.Figure(data=go.Choropleth(
+        locations=df['State_ISO2'],
+        z=df['Game Played'].astype(int),
+        locationmode='USA-states',
+        colorscale='Oranges',
+        autocolorscale=False,
+        text=df['text'],  # hover text
+        marker_line_color='black',  # line markers between states
+        colorbar_title="Games Played",
+        hovertemplate='%{customdata}<br>Games Played: %{z},<br>%{text}<extra></extra>',
+        customdata=df["State"]
+    ))
+
+    fig.update_layout(
+        title_text="Number of Games Played in Each State",
+        geo=dict(
+            scope='usa',
+            projection=go.layout.geo.Projection(type='albers usa'),
+        ),
+        plot_bgcolor = "black"
+    )
+    return fig
