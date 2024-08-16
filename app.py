@@ -84,12 +84,11 @@ if user_menu == 'Player-wise':
     with t10:
         st.plotly_chart(line_bar_plot(selected_player, "TOV", title="Total Turnover", scale=5))
 
-    # column1, column2 = st.columns(2, gap="large")
-    #
-    # with column1:
     fig4,ax4 = plt.subplots(figsize = (25,20))
     fig4 =radar_chart(selected_player, selected_season)
     st.plotly_chart(fig4)
 
-    # with  column2:
-    #     st.header("Another Chart")
+    fig5,ax5 = plt.subplots()
+    fig5 = game_choropleth_map(selected_player,selected_season)
+    st.plotly_chart(fig5)
+
