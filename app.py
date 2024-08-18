@@ -7,6 +7,8 @@ import seaborn as sns
 from NBA_DATA import *
 from helper import *
 
+st.set_page_config(page_title="NBA WEBAPP",layout="wide")
+
 st.sidebar.title("NBA Analysis")
 user_menu = st.sidebar.radio(
     'Select An Option',
@@ -15,7 +17,9 @@ user_menu = st.sidebar.radio(
 
 if user_menu == 'Player-wise':
     col1, col2 = st.columns(2, vertical_alignment="top", gap="large")
-    selected_player = st.sidebar.selectbox("Select Player", get_players_name_list())
+    player_name_list = get_players_name_list()
+    default_index = player_name_list.index("LeBron James")
+    selected_player = st.sidebar.selectbox("Select Player", player_name_list, index= default_index)
     season_id = get_season_id_list(selected_player)
     selected_season = st.sidebar.selectbox("select season", season_id)
     with col1:
@@ -84,11 +88,10 @@ if user_menu == 'Player-wise':
     with t10:
         st.plotly_chart(line_bar_plot(selected_player, "TOV", title="Total Turnover", scale=5))
 
-    fig4,ax4 = plt.subplots(figsize = (25,20))
-    fig4 =radar_chart(selected_player, selected_season)
+    fig4, ax4 = plt.subplots(figsize=(25, 20))
+    fig4 = radar_chart(selected_player, selected_season)
     st.plotly_chart(fig4)
 
-    fig5,ax5 = plt.subplots()
-    fig5 = game_choropleth_map(selected_player,selected_season)
+    fig5, ax5 = plt.subplots()
+    fig5 = game_choropleth_map(selected_player, selected_season)
     st.plotly_chart(fig5)
-
