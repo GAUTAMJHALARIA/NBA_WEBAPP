@@ -15,6 +15,19 @@ from matplotlib.collections import PatchCollection
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap, BoundaryNorm
 from matplotlib.path import Path
 
+
+st.set_page_config(
+    page_title="Ex-stream-ly Cool App",
+    page_icon="🧊",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
+)
+
 st.sidebar.title("NBA Analysis")
 user_menu = st.sidebar.radio(
     'Select an Option',
