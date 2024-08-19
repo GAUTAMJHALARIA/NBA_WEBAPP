@@ -270,7 +270,7 @@ def hexmap_chart(data, league_avg, title="", color="b",
     return ax
 
 
-def line_bar_plot(player_name, stat,title,scale):
+def line_bar_plot(player_name, stat, title, scale):
     player_id = get_id(player_name)
     career = playercareerstats.PlayerCareerStats(player_id=player_id)
     stats = career.get_data_frames()[0]
@@ -299,7 +299,7 @@ def line_bar_plot(player_name, stat,title,scale):
         customdata=df['GP']
     )
     layout = go.Layout(
-        xaxis=dict(title='Season', tickvals = df['SEASON_ID']),
+        xaxis=dict(title='Season', tickvals=df['SEASON_ID']),
         yaxis=dict(title=title.format(stat)),
         yaxis2=dict(title='Games Played', overlaying='y', side='right'),
         legend=dict(x=0.1, y=1.1, orientation='h'),
@@ -308,22 +308,23 @@ def line_bar_plot(player_name, stat,title,scale):
     fig = go.Figure(data=[plot1, plot2], layout=layout)
     return fig
 
-def radar_chart(player_name,season):
-    game_stats = get_player_gamelogs(player_name,season)
+
+def radar_chart(player_name, season):
+    game_stats = get_player_gamelogs(player_name, season)
     relevant_stats = ['PTS', 'AST', 'REB', 'STL', 'BLK', 'TOV', 'MIN', 'FG_PCT', 'FT_PCT', 'FG3M']
 
     season_stats = game_stats[relevant_stats].mean()
+
     def normalize_data(stats, stats_min, stats_max):
         return (stats - stats_min) / (stats_max - stats_min)
 
     normalized_season_stats = normalize_data(season_stats, season_stats.min(), season_stats.max())
 
-
     plot1 = go.Scatterpolar(
         r=normalized_season_stats.tolist() + [normalized_season_stats.tolist()[0]],  # Complete the loop
         theta=relevant_stats + [relevant_stats[0]],  # Complete the loop
         name='Season',
-        line_color= 'blue'
+        line_color='blue'
     )
 
     # Function to update interval stats
@@ -348,13 +349,13 @@ def radar_chart(player_name,season):
     layout = go.Layout(
         polar=dict(
             bgcolor='black',  # Background color of the radar chart
-            radialaxis=dict(visible=True, range=[0, 1],color='white'),
+            radialaxis=dict(visible=True, range=[0, 1], color='white'),
             angularaxis=dict(
                 visible=True,
                 color='white'  # Color of the angular axis
             )
         ),
-        title= "Players Interval stats",
+        title="Players Interval stats",
         showlegend=True,
         sliders=[{
             'active': initial_interval_size - 1,
@@ -377,15 +378,15 @@ def radar_chart(player_name,season):
     fig = go.Figure(data=[plot1, plot2], layout=layout)
     return fig
 
-def game_choropleth_map(player_name,season):
 
-    df = get_game_location_df(player_name=player_name,season=season)
+def game_choropleth_map(player_name, season):
+    df = get_game_location_df(player_name=player_name, season=season)
     for col in df.columns:
         df[col] = df[col].astype(str)
 
     df['text'] = df['Data'] + '<br>'
 
-    fig = go.Figure(data=go.Choropleth(
+    plot = go.Choropleth(
         locations=df['State_ISO2'],
         z=df['Game Played'].astype(int),
         locationmode='USA-states',
@@ -396,14 +397,16 @@ def game_choropleth_map(player_name,season):
         colorbar_title="Games Played",
         hovertemplate='%{customdata}<br>Games Played: %{z},<br>%{text}<extra></extra>',
         customdata=df["State"]
-    ))
+    )
 
-    fig.update_layout(
+    layout = go.Layout(
         title_text="Number of Games Played in Each State",
         geo=dict(
             scope='usa',
             projection=go.layout.geo.Projection(type='albers usa'),
+            bgcolor='rgba(0,0,0,0)',
         ),
-        plot_bgcolor = "black"
+
     )
+    fig = go.Figure(data=[plot],layout=layout)
     return fig
