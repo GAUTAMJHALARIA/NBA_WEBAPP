@@ -77,21 +77,6 @@ if user_menu == 'Player-wise':
                 hexmap_chart(shot_chart_df, league_avg)
                 st.pyplot(fig3)
 
-
-
-    column1, column2 = st.columns(2)
-    # radar chart to compare average performance of the season with interval of last games
-    with column1:
-        fig4, ax4 = plt.subplots(figsize=(25, 20))
-        fig4 = radar_chart(selected_player, selected_season)
-        st.plotly_chart(fig4)
-
-    # choropleth map to visualize no. of games played in different states and city
-    with column2:
-        fig5, ax5 = plt.subplots()
-        fig5 = game_choropleth_map(selected_player, selected_season)
-        st.plotly_chart(fig5)
-
         # setting different tabs for different stats of the player to plot combine chart of bar and line plot
     t1, t2, t3, t4, t5, t6, t7, t8, t9, t10 = st.tabs(
         ["MIN", "PTS", "FG_PCT", "FG3_PCT", "FT_PCT", "REB", "AST", "STL", "BLK", "TOV"])
@@ -116,3 +101,17 @@ if user_menu == 'Player-wise':
         st.plotly_chart(line_bar_plot(selected_player, "BLK", title="Total Blocks", scale=1))
     with t10:
         st.plotly_chart(line_bar_plot(selected_player, "TOV", title="Total Turnover", scale=5))
+
+
+    column1, column2 = st.columns(2)
+    # radar chart to compare average performance of the season with interval of last games
+    with column1:
+        fig4, ax4 = plt.subplots(figsize=(25, 20))
+        fig4 = radar_chart(selected_player, selected_season)
+        st.plotly_chart(fig4)
+
+    # choropleth map to visualize no. of games played in different states and city
+    with column2:
+        fig5, ax5 = plt.subplots()
+        fig5 = game_choropleth_map(selected_player, selected_season)
+        st.plotly_chart(fig5)
