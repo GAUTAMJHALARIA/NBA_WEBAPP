@@ -112,6 +112,9 @@ if user_menu == 'Player-wise':
 
     # choropleth map to visualize no. of games played in different states and city
     with column2:
-        fig5, ax5 = plt.subplots()
-        fig5 = game_choropleth_map(selected_player, selected_season)
-        st.plotly_chart(fig5)
+        on = st.toggle("Activate Choroplethmap")
+
+        if on:
+            fig5, ax5 = plt.subplots()
+            fig5 = game_choropleth_map(selected_player, selected_season)
+            st.plotly_chart(fig5)
