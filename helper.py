@@ -1,9 +1,11 @@
+# importing basic libraries
 import seaborn as sns
-import pandas as pd
 import plotly.graph_objs as go
 
 from NBA_DATA import *
 from urllib.request import urlretrieve
+
+# importing libraries for drawing court
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Rectangle, Arc, PathPatch
 from matplotlib.collections import PatchCollection
@@ -408,5 +410,5 @@ def game_choropleth_map(player_name, season):
         ),
 
     )
-    fig = go.Figure(data=[plot],layout=layout)
+    fig = go.Figure(data=[plot], layout=layout)
     return fig
