@@ -33,11 +33,10 @@ if user_menu == 'Player-wise':
         #stting up players photo
         with st.container():
             st.header("Player About")
-            image = get_player_img(selected_player)
             c1, c2 = st.columns(2)
             with c1:
                 st.image(
-                    image,
+                    get_player_img(selected_player),
                     use_column_width="auto",
                     channels="RGB"
 
