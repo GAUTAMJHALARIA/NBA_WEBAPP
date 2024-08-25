@@ -1,0 +1,6 @@
+streamlit
+plotly
+nba_api
+seaborn
+matplotlib
+scipy
