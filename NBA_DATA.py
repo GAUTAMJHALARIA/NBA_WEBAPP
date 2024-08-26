@@ -5,7 +5,7 @@ from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.endpoints import shotchartdetail
 from nba_api.stats.endpoints import playergamelog
 from nba_api.stats.endpoints import BoxScoreSummaryV2
-
+import time
 import pandas as pd
 
 
@@ -16,6 +16,8 @@ def get_game_location_df(player_name, season):
     for game_id in game_id_list:
         game_info = BoxScoreSummaryV2(game_id=str(game_id))
         home_team_id.append(game_info.game_summary.get_dict()['data'][0][6])
+        time.sleep(2)
+
 
     city_list = []
     for i, game_id in zip(home_team_id, game_id_list):
@@ -23,6 +25,8 @@ def get_game_location_df(player_name, season):
         temp_df = game_info.line_score.get_data_frame()
         city_name = temp_df[temp_df["TEAM_ID"] == i]["TEAM_CITY_NAME"]
         city_list.append(list(city_name)[0])
+        time.sleep(2)
+
 
     nba_city_states = {
         'Atlanta': 'Georgia',
